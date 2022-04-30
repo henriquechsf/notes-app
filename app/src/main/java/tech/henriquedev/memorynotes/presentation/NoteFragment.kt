@@ -2,17 +2,17 @@ package tech.henriquedev.memorynotes.presentation
 
 import android.inputmethodservice.InputMethodService
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import tech.henriquedev.core.data.Note
+import tech.henriquedev.memorynotes.R
 import tech.henriquedev.memorynotes.databinding.FragmentNoteBinding
 import tech.henriquedev.memorynotes.framework.NoteViewModel
 
@@ -24,6 +24,11 @@ class NoteFragment : Fragment() {
     private var currentNote = Note(title = "", content = "", creationTime = 0L, updateTime = 0L)
 
     private var noteId = 0L
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,5 +92,30 @@ class NoteFragment : Fragment() {
     private fun hideKeyBoard() {
         val imm = context?.getSystemService(InputMethodService.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.edtTitle.windowToken, 0)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.note_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.delete_note -> {
+                if (context != null && noteId != 0L) {
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Remover nota")
+                        .setMessage("Tem certeza que deseja remover a nota?")
+                        .setPositiveButton("Sim") { dialogInterface, i ->
+                            viewModel.deleteNote(currentNote)
+                        }
+                        .setNegativeButton("Não") { dialogInterface, i -> }
+                        .create()
+                        .show()
+                }
+            }
+        }
+
+        return true
     }
 }
