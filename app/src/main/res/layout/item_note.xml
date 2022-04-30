@@ -6,6 +6,7 @@
     app:cardUseCompatPadding="true"
     android:layout_width="match_parent"
     android:layout_height="@dimen/layout_card_height"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
