@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +23,8 @@ class NoteFragment : Fragment() {
     private lateinit var viewModel: NoteViewModel
     private var currentNote = Note(title = "", content = "", creationTime = 0L, updateTime = 0L)
 
+    private var noteId = 0L
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,6 +37,14 @@ class NoteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(NoteViewModel::class.java)
+
+        arguments?.let {
+            noteId = NoteFragmentArgs.fromBundle(it).noteId
+        }
+
+        if (noteId != 0L) {
+            viewModel.getNote(noteId)
+        }
 
         binding.fabCheck.setOnClickListener {
             if (binding.edtTitle.text.toString() != "" || binding.edtContent.text.toString() != "") {
@@ -61,6 +72,14 @@ class NoteFragment : Fragment() {
                 Navigation.findNavController(binding.edtTitle).popBackStack()
             } else {
                 Toast.makeText(context, "Algo deu errado, tente novamente.", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        viewModel.currentNote.observe(viewLifecycleOwner, Observer { note ->
+            note?.let {
+                currentNote = it
+                binding.edtTitle.setText(it.title, TextView.BufferType.EDITABLE)
+                binding.edtContent.setText(it.content, TextView.BufferType.EDITABLE)
             }
         })
     }

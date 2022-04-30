@@ -14,11 +14,11 @@ import tech.henriquedev.memorynotes.databinding.FragmentListBinding
 import tech.henriquedev.memorynotes.databinding.FragmentNoteBinding
 import tech.henriquedev.memorynotes.framework.ListViewModel
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), ListAction {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
 
-    private val notesListAdapter = NotesListAdapter(arrayListOf())
+    private val notesListAdapter = NotesListAdapter(arrayListOf(), this)
     private lateinit var viewModel: ListViewModel
 
     override fun onCreateView(
@@ -52,12 +52,16 @@ class ListFragment : Fragment() {
     }
 
     private fun goToNoteDetails(id: Long = 0L) {
-        val action = ListFragmentDirections.actionGoToNote()
+        val action = ListFragmentDirections.actionGoToNote(id)
         Navigation.findNavController(binding.notesListView).navigate(action)
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.getNotes()
+    }
+
+    override fun onClick(id: Long) {
+        goToNoteDetails(id)
     }
 }
