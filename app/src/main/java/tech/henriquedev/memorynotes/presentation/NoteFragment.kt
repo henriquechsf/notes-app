@@ -1,6 +1,5 @@
 package tech.henriquedev.memorynotes.presentation
 
-import android.annotation.SuppressLint
 import android.inputmethodservice.InputMethodService
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,10 +11,9 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import androidx.viewbinding.ViewBinding
 import tech.henriquedev.core.data.Note
-import tech.henriquedev.memorynotes.R
 import tech.henriquedev.memorynotes.databinding.FragmentNoteBinding
+import tech.henriquedev.memorynotes.framework.NoteViewModel
 
 class NoteFragment : Fragment() {
     private var _binding: FragmentNoteBinding? = null

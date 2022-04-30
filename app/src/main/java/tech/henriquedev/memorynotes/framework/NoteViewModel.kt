@@ -1,4 +1,4 @@
-package tech.henriquedev.memorynotes.presentation
+package tech.henriquedev.memorynotes.framework
 
 import android.app.Application
 import android.content.Context
